@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>С 8 Марта, мама!</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg1: #ffe6f7;
+      --bg2: #ffb3c6;
+      --accent: #ff2e7a;
+      --accent-soft: #ff8fb1;
+      --text-main: #3f1234;
+      --text-soft: #7a3259;
+      --card-bg: rgba(255, 255, 255, 0.97);
+      --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.18);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, var(--bg1), var(--bg2));
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .scene {
+      width: 100%;
+      max-width: 980px;
+      min-height: 100vh;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Падающие эмодзи */
+    .falling-container {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .falling-emoji {
+      position: absolute;
+      font-size: 34px;
+      opacity: 0;
+      animation: fall 3.2s ease-out forwards;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.25));
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-120vh) rotate(-18deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      75% {
+        transform: translateY(15vh) rotate(6deg);
+      }
+      100% {
+        transform: translateY(25vh) rotate(0deg);
+        opacity: 0;
+      }
+    }
+
+    /* Карточка */
+    .card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 860px;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 20px 18px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      backdrop-filter: blur(14px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #ffe8f5, #fff1f7);
+      padding: 12px 16px;
+    }
+
+    .chip {
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 46, 122, 0.09);
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .card-header-title {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .card-header-title h1 {
+      font-size: clamp(24px, 4vw, 30px);
+      font-weight: 700;
+    }
+
+    .card-header-title span {
+      font-size: 13px;
+      opacity: 0.85;
+    }
+
+    /* Текст "С 8 марта" */
+    .greeting-wrapper {
+      position: relative;
+      border-radius: var(--radius-md);
+      padding: 22px 14px 16px;
+      background: radial-gradient(circle at top, #ffeaf6, #ffffff);
+      overflow: hidden;
+    }
+
+    .greeting {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      font-size: clamp(36px, 7.6vw, 50px);
+      font-weight: 800;
+      letter-spacing: 6px;
+      margin-bottom: 6px;
+    }
+
+    .greeting span {
+      display: inline-block;
+      transform: translateY(30px);
+      opacity: 0;
+      animation: letterIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes letterIn {
+      0% {
+        transform: translateY(30px) scale(0.9);
+        opacity: 0;
+      }
+      60% {
+        transform: translateY(-6px) scale(1.06);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .greeting-subtitle {
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.85;
+    }
+
+    /* Книжка / карусель */
+    .book-section {
+      border-radius: var(--radius-md);
+      background: #fff;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .book-intro {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .book-intro-icon {
+      font-size: 22px;
+    }
+
+    .book-intro-text h2 {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .book-intro-text p {
+      font-size: 14px;
+      line-height: 1.45;
+      opacity: 0.9;
+    }
+
+    .book {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffe3f2, #fff);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      min-height: 460px;          /* БОЛЬШЕ высота — больше картинка */
+      display: flex;
+      flex-direction: column;
+    }
+
+    .book-pages {
+      position: relative;
+      flex: 1;
+      display: grid;
+      place-items: center;
+      background: #fef7fb;
+      padding: 8px;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      opacity: 0;
+      transform: translateX(10%);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .page.active {
+      opacity: 1;
+      transform: translateX(0);
+      z-index: 2;
+    }
+
+    .page.exit-left {
+      opacity: 0;
+      transform: translateX(-10%);
+      z-index: 1;
+    }
+
+    .page-content-text {
+      max-width: 520px;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1.7;
+      padding: 0 10px;
+    }
+
+    /* Фотки: занимают всю высоту блока */
+    .page img {
+      width: auto;
+      height: 100%;
+      max-height: 100%;
+      max-width: 100%;
+      border-radius: 18px;
+      object-fit: cover;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+      cursor: zoom-in;
+    }
+
+    .book-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+    }
+
+    .book-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      border: none;
+      padding: 7px 13px;
+      border-radius: var(--radius-pill);
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 6px 18px rgba(255,46,122,0.4);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn.secondary {
+      background: rgba(0,0,0,0.04);
+      color: var(--text-soft);
+      box-shadow: none;
+    }
+
+    .btn:disabled {
+      background: rgba(0,0,0,0.06);
+      color: rgba(0,0,0,0.35);
+      box-shadow: none;
+      cursor: default;
+    }
+
+    .btn:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 9px 26px rgba(255,46,122,0.55);
+    }
+
+    .book-progress {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* QR в конце, крупный */
+    .qr-section {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 14px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #ffeef8, #ffffff);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .qr-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .qr-image-wrapper {
+      flex-shrink: 0;
+      width: min(42vw, 210px);
+      height: min(42vw, 210px);
+      border-radius: 24px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 14px 32px rgba(0,0,0,0.22);
+      overflow: hidden;
+      padding: 10px;
+      cursor: zoom-in;
+    }
+
+    .qr-image-wrapper:hover {
+      box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+    }
+
+    .qr-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+
+    .qr-text {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .qr-note {
+      font-size: 11px;
+      opacity: 0.65;
+      margin-top: 4px;
+    }
+
+    .hint {
+      font-size: 11px;
+      text-align: center;
+      opacity: 0.8;
+      margin-top: 4px;
+    }
+
+    /* Полноэкранный просмотр (фото и QR одно и то же окно) */
+    .img-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .img-overlay.visible {
+      display: flex;
+    }
+
+    .img-overlay-inner {
+      max-width: 95vw;
+      max-height: 95vh;
+      background: #fff;
+      padding: 16px;
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .img-overlay-inner img {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+
+    .img-overlay-hint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 12px;
+      opacity: 0.85;
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .card {
+        padding: 22px 22px 24px;
+      }
+      .book {
+        flex-direction: row;
+        min-height: 500px;   /* ещё выше на десктопе */
+      }
+      .book-pages {
+        flex: 4;
+      }
+      .book-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        width: 220px;
+        border-left: 1px solid rgba(0,0,0,0.04);
+        border-top: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .qr-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .qr-text {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="falling-container" id="falling"></div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-title">
+          <h1>С 8 марта, мама!</h1>
+          <span>Небольшой сайт-открытка, который я сделал специально для тебя 💗</span>
+        </div>
+        <div class="chip">
+          💐 Сегодня твой день
+        </div>
+      </div>
+
+      <div class="greeting-wrapper">
+        <div class="greeting" id="greeting">
+          <span data-delay="0">С</span>
+          <span data-delay="0.3">8</span>
+          <span data-delay="0.6">М</span>
+          <span data-delay="0.9">А</span>
+          <span data-delay="1.2">Р</span>
+          <span data-delay="1.5">Т</span>
+          <span data-delay="1.8">А</span>
+        </div>
+        <div class="greeting-subtitle">
+          Пусть сегодняшний день будет тёплым, добрым и только для тебя ✨
+        </div>
+      </div>
+
+      <section class="book-section">
+        <div class="book-intro">
+          <div class="book-intro-icon">📖</div>
+          <div class="book-intro-text">
+            <h2>Наши моменты</h2>
+            <p>
+              Здесь я собрал несколько тёплых моментов. Просто пролистывай страницы, а позже я добавлю сюда наши любимые фотографии.
+            </p>
+          </div>
+        </div>
+
+        <div class="book" aria-label="Фотокнига с воспоминаниями">
+          <div class="book-pages">
+            <!-- Страница 1: текст -->
+            <article class="page active" data-index="0">
+              <div class="page-content-text">
+                Мама, спасибо тебе за всё, что ты делаешь каждый день — часто тихо и незаметно,
+                но с огромной любовью. Ты делаешь мой мир намного светлее.
+              </div>
+            </article>
+
+            <!-- Страница 2: фото 1 -->
+            <article class="page" data-index="1">
+              <img src="photo1.jpg" alt="Наше фото 1" />
+            </article>
+
+            <!-- Страница 3: фото 2 -->
+            <article class="page" data-index="2">
+              <img src="photo2.jpg" alt="Наше фото 2" />
+            </article>
+
+            <!-- Страница 4: фото 3 -->
+            <article class="page" data-index="3">
+              <img src="photo3.jpg" alt="Наше фото 3" />
+            </article>
+
+            <!-- Страница 5: финальный текст -->
+            <article class="page" data-index="4">
+              <div class="page-content-text">
+                Я очень тебя люблю. Пусть у тебя будет как можно больше поводов улыбаться,
+                а я постараюсь быть одним из них. Спасибо, что ты — моя мама. 💕
+              </div>
+            </article>
+          </div>
+
+          <footer class="book-footer">
+            <div class="book-progress" id="bookProgress">
+              Страница 1 из 5
+            </div>
+            <div class="book-controls">
+              <button class="btn secondary" id="prevBtn" disabled>⬅ Назад</button>
+              <button class="btn" id="nextBtn">Вперёд ➡</button>
+            </div>
+          </footer>
+        </div>
+
+        <div class="hint">
+        </div>
+      </section>
+
+      <section class="qr-section" id="qrSection" aria-hidden="true">
+        <div class="qr-image-wrapper">
+          <img src="qr.png" alt="Мой QR-код" />
+        </div>
+        <div>
+          Нажми на него, чтобы открыть крупнее.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Оверлей для увеличенного изображения (фото/QR) -->
+  <div class="img-overlay" id="imgOverlay" aria-hidden="true">
+    <div class="img-overlay-inner">
+      <img src="" alt="Просмотр изображения" id="overlayImg" />
+    </div>
+    <div class="img-overlay-hint">
+      Нажми в любом месте или клавишу Esc, чтобы закрыть
+    </div>
+  </div>
+
+  <script>
+    // Падающие эмодзи
+    const fallingContainer = document.getElementById('falling');
+    const emojis = ['💐', '🌸', '🌷', '🌺', '💖', '✨', '🌼', '💞', '💓', '🌹'];
+    const EMOJI_COUNT = 28;
+
+    for (let i = 0; i < EMOJI_COUNT; i++) {
+      const span = document.createElement('span');
+      span.className = 'falling-emoji';
+      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      const delay = Math.random() * 1.8;
+      const left = Math.random() * 100;
+      const duration = 2.6 + Math.random() * 1.5;
+
+      span.style.left = left + 'vw';
+      span.style.animationDelay = delay + 's';
+      span.style.animationDuration = duration + 's';
+      fallingContainer.appendChild(span);
+    }
+
+    const maxAnimTime = 1.8 + 4.0;
+    setTimeout(() => {
+      fallingContainer.style.transition = 'opacity 1s ease';
+      fallingContainer.style.opacity = '0';
+      setTimeout(() => {
+        fallingContainer.remove();
+      }, 1100);
+    }, maxAnimTime * 1000);
+
+    // Анимация букв
+    const greetingEl = document.getElementById('greeting');
+    Array.from(greetingEl.querySelectorAll('span')).forEach((span) => {
+      const d = parseFloat(span.dataset.delay || '0');
+      span.style.animationDelay = d + 's';
+    });
+
+    // Книжка
+    const pages = Array.from(document.querySelectorAll('.page'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const bookProgress = document.getElementById('bookProgress');
+    const qrSection = document.getElementById('qrSection');
+
+    let currentIndex = 0;
+
+    function showPage(newIndex) {
+      if (newIndex === currentIndex || newIndex < 0 || newIndex >= pages.length) return;
+
+      const currentPage = pages[currentIndex];
+      const nextPage = pages[newIndex];
+
+      currentPage.classList.remove('active');
+      currentPage.classList.add('exit-left');
+
+      setTimeout(() => {
+        currentPage.classList.remove('exit-left');
+      }, 450);
+
+      nextPage.classList.add('active');
+      currentIndex = newIndex;
+
+      updateControls();
+      updateProgress();
+      updateQRVisibility();
+    }
+
+    function updateControls() {
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === pages.length - 1;
+    }
+
+    function updateProgress() {
+      bookProgress.textContent = 'Страница ' + (currentIndex + 1) + ' из ' + pages.length;
+    }
+
+    function updateQRVisibility() {
+      const atLastPage = currentIndex === pages.length - 1;
+      if (atLastPage) {
+        qrSection.classList.add('visible');
+        qrSection.setAttribute('aria-hidden', 'false');
+      } else {
+        qrSection.classList.remove('visible');
+        qrSection.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    prevBtn.addEventListener('click', () => showPage(currentIndex - 1));
+    nextBtn.addEventListener('click', () => showPage(currentIndex + 1));
+
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (!isTouch) {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') showPage(currentIndex + 1);
+        if (e.key === 'ArrowLeft') showPage(currentIndex - 1);
+      });
+    }
+
+    updateControls();
+    updateProgress();
+    updateQRVisibility();
+
+    // Полноэкранный просмотр фото и QR
+    const imgOverlay = document.getElementById('imgOverlay');
+    const overlayImg = document.getElementById('overlayImg');
+
+    function openImageFullscreen(src, alt) {
+      overlayImg.src = src;
+      overlayImg.alt = alt || '';
+      imgOverlay.classList.add('visible');
+      imgOverlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeImageFullscreen() {
+      imgOverlay.classList.remove('visible');
+      imgOverlay.setAttribute('aria-hidden', 'true');
+      overlayImg.src = '';
+    }
+
+    document.querySelectorAll('.book-pages img').forEach(img => {
+      img.addEventListener('click', () => {
+        openImageFullscreen(img.src, img.alt);
+      });
+    });
+
+    const qrWrapper = document.querySelector('.qr-image-wrapper');
+    if (qrWrapper) {
+      const qrImg = qrWrapper.querySelector('img');
+      qrWrapper.addEventListener('click', () => {
+        if (qrImg) openImageFullscreen(qrImg.src, qrImg.alt);
+      });
+    }
+
+    imgOverlay.addEventListener('click', closeImageFullscreen);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && imgOverlay.classList.contains('visible')) {
+        closeImageFullscreen();
+      }
+    });
+  </script>
+</body>
+</html>
